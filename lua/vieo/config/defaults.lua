@@ -11,13 +11,13 @@ end
 local defaults =
 { verbose = false
 
--- by default, view.nvim will not dirty the default viewdir
+-- by default, vieo will not dirty the default viewdir
 -- but rather use the isolated `.cache/vieo/views/`
 -- if you would like to use the default viewdir, or specify your own,
 -- change this to your target
 , viewdir = vim.fn.stdpath('cache') .. '/vieo/views'
 
--- view.nvim thinks twice before restoring views
+-- vieo thinks twice before restoring views
 -- but on top of that, you may want to define extra rules to exclude buffers
 -- on which restoring views are not useful e.g. gitcommit
 --
