@@ -35,29 +35,32 @@ local builtin_rule = function (user, buf)
   end
 
   -- in diff mode?
-  local diffmode = (function ()
+  local diffmode = function ()
     return vim.api.nvim_buf_call(buf, function ()
       return vim.wo.diff
     end)
-  end)()
+  end
 
   -- is temp file?
-  local tempfile = (function ()
+  local tempfile = function ()
     local tmp = os.getenv 'TMPDIR'
-    if not tmp then return false end
-    return tmp == vim.fs.dirname(vim.api.nvim_buf_get_name(buf))
-  end)()
+    if tmp then
+      return tmp == vim.fs.dirname(vim.api.nvim_buf_get_name(buf))
+    end
 
-  local bufname = vim.api.nvim_buf_get_name(buf)
+    return false
+  end
+
+  local bufname = vim.api.nvim_buf_get_name
   local buftype = vim.bo[buf].buftype
   local modifiable = vim.bo[buf].modifiable
 
-  local res = not diffmode
-              and (not tempfile)
-              and not bufname ~= ''
-              and (not bufname:match '%[.*%]')  -- [No Name]
-              and buftype == ''
-              and modifiable
+  local res = (not diffmode())
+          and (not tempfile())
+          and (not bufname(buf) ~= '')
+          and (not bufname(buf):match '%[.*%]')  -- [No Name]
+          and buftype == ''
+          and modifiable
 
   return res
 end
